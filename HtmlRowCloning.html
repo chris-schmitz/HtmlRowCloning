@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Row Cloning</title>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+        <script>
+        $(document).ready(function (){
+
+            function formBuilder(formInput){
+                this.formInput = formInput;
+                this.totalRows = {
+                    'parent': this.formInput.parent_nameFirst.length, 
+                    'students': this.formInput.student_nameFirst.length
+                };
+                this.populateRowInputs = function (){
+                    $.each(formInput,function (key, value){
+                            console.log(key + ": " + value);
+                        }
+                    );
+                };
+                this.buildFormRows = function (type){
+                    var tableId = "#" + type + "Table";
+                    var tableBody = $(tableId).find("tbody");
+                    var newRow = tableBody.find(".inputRow").first().clone().find("input").val('').end();
+                    newRow.appendTo(tableBody);
+
+                }
+            }
+
+            var formInput = {
+                "parent_nameFirst": ["Chris", "Ruthie"],
+                "parent_nameLast": ["Schmitz", "Whittam"],
+                "phone": ["314.650.8682", "314.123.4567"],
+                "email": ["schmitz.chris@gmail.com", "ruthie@chrisandruthie.com"],
+                "student_nameFirst": [""],
+                "student_nameLast": ["Puppy"],
+                "age": ["4"],
+                "grade": ["1"],
+                "zip": ["63139"],
+                "programInterests": ["bikeworks"]
+            }
+
+            builder = new formBuilder(formInput);
+
+            $("#parentButton").on("click", function (){
+            debugger;
+                builder.buildFormRows('parent');
+            });
+            
+            $("#studentButton").on("click", function (){
+                builder.buildFormRows('student');
+            });
+
+        });
+
+        </script>
+
+    </head>
+    <body>
+       <table id="parentTable">
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Phone</th>
+                <th>Email</th>
+            </tr>
+            <tr class="inputRow">
+                <td><input name="parent_nameFirst"></td>
+                <td><input name="parent_nameLast"></td>
+                <td><input name="phone"></td>
+                <td><input name="email"></td>
+            </tr>
+       </table>
+       <table id="studentTable">
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Age</th>
+                <th>Grade</th>
+                <th>Zip</th>
+                <th>Program Interests</th>
+            </tr>
+            <tr class="inputRow">
+                <td><input name="student_nameFirst"></td>
+                <td><input name="student_nameLast"></td>
+                <td><input name="age"></td>
+                <td><input name="grade"></td>
+                <td><input name="zip"></td>
+                <td><input name="program_interests"></td>
+            </tr>
+       </table>
+
+       <div>
+            <button id="parentButton" type="button">Duplicate Parent Row</button>
+            <button id="studentButton" type="button">Duplicate Student Row</button>
+       </div>
+    </body>
+</html>
