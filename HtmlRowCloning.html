@@ -13,20 +13,28 @@
                     'parent': this.formInput.parent_nameFirst.length, 
                     'students': this.formInput.student_nameFirst.length
                 };
-                this.populateRowInputs = function (){
-                    $.each(formInput,function (key, value){
-                            console.log(key + ": " + value);
-                        }
-                    );
-                };
                 this.buildFormRows = function (type){
                     var tableId = "#" + type + "Table";
                     var tableBody = $(tableId).find("tbody");
                     var newRow = tableBody.find(".inputRow").first().clone().find("input").val('').end();
                     newRow.appendTo(tableBody);
 
-                }
+                };
+                this.populateRowInputs = function (){
+                    $.each(this.formInput,function (key, value){
+                        debugger;
+                        var inputsName = "input[name=" + key + "]";
+                        var input = $(inputsName);
+                        $.each(input,function (value){
+                            debugger;
+                            $(this).val(value);
+                        });
+                    });
+                };
+
             }
+
+
 
             var formInput = {
                 "parent_nameFirst": ["Chris", "Ruthie"],
