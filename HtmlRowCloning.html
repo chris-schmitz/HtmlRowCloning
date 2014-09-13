@@ -5,6 +5,21 @@
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 
         <script>
+
+        var formInput = {
+            "parent_nameFirst": ["Chris", "Ruthie"],
+            "parent_nameLast": ["Schmitz", "Whittam"],
+            "phone": ["314.650.8682", "314.123.4567"],
+            "email": ["schmitz.chris@gmail.com", "ruthie@chrisandruthie.com"],
+            "student_nameFirst": ["Petey", "Zoe", "Madori"],
+            "student_nameLast": ["Puppy", "Doggie", "Kitty"],
+            "age": ["4", "1", "8"],
+            "grade": ["1", "4", "12"],
+            "zip": ["63139", "12345", "54321"],
+            "program_interests": ["bikeworks", "bikeworks, bookworks", "bikeworks, bookworks, byteworks"]
+        }
+
+
         $(document).ready(function (){
 
             function formBuilder(formInput){
@@ -13,7 +28,7 @@
                     'parent': this.formInput.parent_nameFirst.length, 
                     'students': this.formInput.student_nameFirst.length
                 };
-                this.buildFormRows = function (type){
+                this.cloneFormRow = function (type){
                     var tableId = "#" + type + "Table";
                     var tableBody = $(tableId).find("tbody");
                     var newRow = tableBody.find(".inputRow").first().clone().find("input").val('').end();
@@ -22,42 +37,42 @@
                 };
                 this.populateRowInputs = function (){
                     $.each(this.formInput,function (key, value){
-                        debugger;
                         var inputsName = "input[name=" + key + "]";
                         var input = $(inputsName);
-                        $.each(input,function (value){
-                            debugger;
-                            $(this).val(value);
+                        var myvals = this;
+                        $.each(input,function (index){
+                            $(this).val(myvals[index]);
                         });
                     });
                 };
+                this.buildForm = function(){
+                debugger;
+                    var parentRowCount = formInput.parent_nameFirst.length ;
+                    var studentRowCount = formInput.student_nameFirst.length ;
+                    for(i=1 ; i < parentRowCount  ; i++){
+                        this.cloneFormRow('parent');
+                    }
+                    for(i=1 ; i < studentRowCount  ; i++){
+                        this.cloneFormRow('student');
+                    }
+                    this.populateRowInputs();
+                }
 
             }
 
-
-
-            var formInput = {
-                "parent_nameFirst": ["Chris", "Ruthie"],
-                "parent_nameLast": ["Schmitz", "Whittam"],
-                "phone": ["314.650.8682", "314.123.4567"],
-                "email": ["schmitz.chris@gmail.com", "ruthie@chrisandruthie.com"],
-                "student_nameFirst": [""],
-                "student_nameLast": ["Puppy"],
-                "age": ["4"],
-                "grade": ["1"],
-                "zip": ["63139"],
-                "programInterests": ["bikeworks"]
-            }
-
+            // Actual form manipulation
+            // the rest of the logic should be abstracted to a separate file 
+            // and the following commands are what should be run on the page.
             builder = new formBuilder(formInput);
+            builder.buildForm();
+
 
             $("#parentButton").on("click", function (){
-            debugger;
-                builder.buildFormRows('parent');
+                builder.cloneFormRow('parent');
             });
             
             $("#studentButton").on("click", function (){
-                builder.buildFormRows('student');
+                builder.cloneFormRow('student');
             });
 
         });
