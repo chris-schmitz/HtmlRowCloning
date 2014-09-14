@@ -6,6 +6,12 @@
 
         <script>
 
+        // This is an example of the expected form input passed back from the PHP controller when
+        // form validation fails. The keys at the top level of the object should match the input
+        // names for the form. 
+        // It should be noted that this assumes that ALL of the values being passed back are for
+        // array inputs. If you have a mix of array inputs and regular single field inputs the 
+        // javascript methods would need to be adjusted a bit. 
         var formInput = {
             "parent_nameFirst": ["Chris", "Ruthie"],
             "parent_nameLast": ["Schmitz", "Whittam"],
@@ -22,12 +28,18 @@
 
         $(document).ready(function (){
 
+            // Constructor. pulls the input passed back from the controller into a property and
+            // determines the number of rows needed for each form based on a hard coded key. 
+            // The depth of the array could be determined dynamically, but for my purposes there
+            // will always be first names for each form and I'm trying to pass salt over here http://xkcd.com/974/
             function formBuilder(formInput){
                 this.formInput = formInput;
                 this.totalRows = {
                     'parent': this.formInput.parent_nameFirst.length, 
                     'students': this.formInput.student_nameFirst.length
                 };
+
+                // Cloning the table rows based on the specified table ID prefix 
                 this.cloneFormRow = function (type){
                     var tableId = "#" + type + "Table";
                     var tableBody = $(tableId).find("tbody");
@@ -35,24 +47,26 @@
                     newRow.appendTo(tableBody);
 
                 };
+                // Stepping through the input object to populate the rows.
+                // This must be done AFTER any additional rows are created.
                 this.populateRowInputs = function (){
                     $.each(this.formInput,function (key, value){
                         var inputsName = "input[name=" + key + "]";
                         var input = $(inputsName);
-                        var myvals = this;
+                        var myvals = this; // Creating a reference to the array we're iterating through so it can be used within the next each.
                         $.each(input,function (index){
                             $(this).val(myvals[index]);
                         });
                     });
                 };
+                // The main method for kicking off the form construction.
                 this.buildForm = function(){
-                debugger;
                     var parentRowCount = formInput.parent_nameFirst.length ;
                     var studentRowCount = formInput.student_nameFirst.length ;
-                    for(i=1 ; i < parentRowCount  ; i++){
+                    for(i = 1 ; i < parentRowCount  ; i++){
                         this.cloneFormRow('parent');
                     }
-                    for(i=1 ; i < studentRowCount  ; i++){
+                    for(i = 1 ; i < studentRowCount  ; i++){
                         this.cloneFormRow('student');
                     }
                     this.populateRowInputs();
@@ -66,7 +80,11 @@
             builder = new formBuilder(formInput);
             builder.buildForm();
 
-
+            /* =======================================================================
+            | This portion of code was just for testing while I built the javascript,
+            | but it could be used for add buttons that are activated by the user.
+            */
+            /*
             $("#parentButton").on("click", function (){
                 builder.cloneFormRow('parent');
             });
@@ -74,7 +92,8 @@
             $("#studentButton").on("click", function (){
                 builder.cloneFormRow('student');
             });
-
+            | =======================================================================
+            */
         });
 
         </script>
@@ -114,9 +133,16 @@
             </tr>
        </table>
 
+       <!-- I created these buttons while testing. I've removed them because I want auto population,
+            but they can be added back in along with the jquery button click listeners if you want
+            add buttons on the table rows
+       -->
+       <!--
        <div>
             <button id="parentButton" type="button">Duplicate Parent Row</button>
             <button id="studentButton" type="button">Duplicate Student Row</button>
        </div>
+       -->
+
     </body>
 </html>
