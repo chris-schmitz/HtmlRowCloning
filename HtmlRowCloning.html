@@ -61,12 +61,10 @@
                 };
                 // The main method for kicking off the form construction.
                 this.buildForm = function(){
-                    var parentRowCount = formInput.parent_nameFirst.length ;
-                    var studentRowCount = formInput.student_nameFirst.length ;
-                    for(i = 1 ; i < parentRowCount  ; i++){
+                    for(i = 1 ; i < this.totalRows.parent  ; i++){
                         this.cloneFormRow('parent');
                     }
-                    for(i = 1 ; i < studentRowCount  ; i++){
+                    for(i = 1 ; i < this.totalRows.student  ; i++){
                         this.cloneFormRow('student');
                     }
                     this.populateRowInputs();
